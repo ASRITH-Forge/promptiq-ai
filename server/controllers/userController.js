@@ -25,7 +25,7 @@ export const registerUser = async (req, res) => {
 }
 
 //API to login user
-const loginUser = async (req, res) => {
+export const loginUser = async (req, res) => {
     const {email, password} = req.body  
     try {
         const user = await User.findOne({email})
@@ -40,5 +40,15 @@ const loginUser = async (req, res) => {
     } catch (error) {
         return res.json({success:false, message:error.message}) 
         
+    }
+}
+
+//API to get user details
+export const getUser = async (req, res) => {
+    try {
+        const user = req.user
+        return res.json({success:true, user})
+    } catch (error) {
+        return res.json({success:false, message:error.message}) 
     }
 }
