@@ -1,5 +1,6 @@
 import User from "../models/User"
 import jwt from "jsonwebtoken"
+import bcrypt from "bcryptjs"
 
 //Generate JWT 
 const generateToken = (id) => {
@@ -20,5 +21,24 @@ export const registerUser = async (req, res) => {
         res.json({success:true, message:"User registered successfully", token})
     } catch (error) {
         return res.json({success:false, message:error.message}) 
+    }
+}
+
+//API to login user
+const loginUser = async (req, res) => {
+    const {email, password} = req.body  
+    try {
+        const user = await User.findOne({email})
+        if(user){
+            const isMatch = await bcrypt.compare(password, user.password)
+            if(isMatch){
+                const token = generateToken(user._id)
+                return res.json({success:true, message:"User logged in successfully", token})
+            }
+        }
+        return res.json({success:false, message:"Invalid email or password"})
+    } catch (error) {
+        return res.json({success:false, message:error.message}) 
+        
     }
 }
