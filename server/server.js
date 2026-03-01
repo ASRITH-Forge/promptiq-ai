@@ -13,7 +13,7 @@ app.use(express.json())
 
 //routes
 app.get("/",(req,res)=>res.send('Server is Live!'))
-app.use('/app/user',userRouter)
+app.use('/api/user',userRouter)
 
 const PORT = process.env.PORT || 3000
 
