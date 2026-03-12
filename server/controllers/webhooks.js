@@ -35,10 +35,14 @@ export const stripeWebhooks = async(req,res)=>{
                 }
                 break;
             }
-
+            default:
+                console.log("Unhandled event type: "+event.type)
+                break;
     } 
+    res.json({received:true})
 }
     catch (error) {
-        
+        console.error("Error processing webhook:", error);
+        return res.status(500).json({success:false, message:"Internal server error"});
     }
 }
