@@ -1,3 +1,4 @@
+import Transaction from "../models/Transaction"
 
 
 const plans = [
@@ -28,6 +29,29 @@ const plans = [
 export const getPlans = (req, res) => {
     try {
         res.json({success:true, plans})
+    } catch (error) {
+        res.json({success:false, message:error.message})
+    }
+}
+
+//API controller for purchasing a plan
+export const purchasePlan = async (req, res) => {
+    try {
+        const { planId } = req.body;
+        const userId = req.user._id
+        const plan = plans.find(plan=>plan._id === planId)
+        if(!plan){
+            return res.json({success:false, message:"Plan not found"})
+        }
+        //create new transaction
+        const transaction = await Transaction.create({
+            userId,
+            planId: plan._id,
+            amount: plan.price,
+            credits: plan.credits,
+            isPaid: false, 
+        })
+        
     } catch (error) {
         res.json({success:false, message:error.message})
     }
