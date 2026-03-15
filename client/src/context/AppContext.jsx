@@ -16,7 +16,7 @@ export const AppContextProvider = ({children}) => {
     const [selectedChat,setSelectedChat] = useState(null)
     const [theme,setTheme] =useState(localStorage.getItem('theme') || 'light')
     const [token,setToken] = useState(localStorage.getItem('token') || null)
-    
+    const [loadingUser,setLoadingUser] = useState(true)
 
     const fetchUser = async () => {
         try {
@@ -28,6 +28,8 @@ export const AppContextProvider = ({children}) => {
             }
         } catch (error) {
             toast.error(error.message)
+        }finally{
+            setLoadingUser(false)
         }
      
     }
