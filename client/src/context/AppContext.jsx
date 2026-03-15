@@ -34,6 +34,19 @@ export const AppContextProvider = ({children}) => {
      
     }
 
+    const createNewChat = async() => {
+        try {
+            if(!user) return toast('Login to create chat')
+            navigate('/')
+            await axios.get('/api/chat/create',{headers:{Authorization:token}})
+            await fetchUserChats()
+        } catch (error) {
+            toast.error(error.message)
+        }
+    }
+
+        
+
     const fetchUserChats = async () => {
         setChats(dummyChats)
         setSelectedChat(dummyChats[0])
