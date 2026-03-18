@@ -17,7 +17,21 @@ const SideBar = ({isMenuOpen, setIsMenuOpen}) => {
     navigate('/login')
   }
 
-  
+  const deleteChat = async (e,chatId) => {
+      try {
+        e.stopPropagation()
+        const confirm = window.confirm("Are you sure you want to delete this chat?")
+        if(!confirm) return
+        const {data} = await axios.post('/api/chat/delete',{chatId},{headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}})
+        if(data.success){
+          setChats(prev => prev.filter(chat => chat._id !== chatId))
+          await fetchUserChats()
+          toast.success(data.message)
+        }
+      } catch (error) {
+        toast.error(error.message)
+      }
+  }
   return (
     <div className={`flex flex-col h-screen min-w-72 p-5 dark:bg-gradient-to-b- from-[#242124] to-[#000000]/30 border-r border-[#80609F]/30 backdrop-blur-3xl transition-all duration-500 max-md:absolute left-0 z-1 ${!isMenuOpen && `max-md:-translate-x-full` }`}>
       {/* logo */}
