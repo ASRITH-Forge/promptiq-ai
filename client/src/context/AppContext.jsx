@@ -21,14 +21,14 @@ export const AppContextProvider = ({children}) => {
 
     const fetchUser = async () => {
         try {
-            const {data}=await axios.get('/api/user/data',{headers:{Authorization:token}})
+            const {data}= await axios.get('/api/user/data',{headers:{Authorization:`Bearer ${token}`}})
             if(data.success){
                 setUser(data.user)
             }else{
                 toast.error(data.message)
             }
         } catch (error) {
-            toast.error(error.message)
+           toast.error(error?.response?.data?.message || error.message)
         }finally{
             setLoadingUser(false)
         }
@@ -39,10 +39,10 @@ export const AppContextProvider = ({children}) => {
         try {
             if(!user) return toast('Login to create chat')
             navigate('/')
-            await axios.get('/api/chat/create',{headers:{Authorization:token}})
+            await axios.post('/api/chat/create',{headers:{Authorization:`Bearer ${token}`}})
             await fetchUserChats()
         } catch (error) {
-            toast.error(error.message)
+            toast.error(error?.response?.data?.message || error.message)
         }
     }
 
@@ -50,7 +50,7 @@ export const AppContextProvider = ({children}) => {
 
     const fetchUserChats = async () => {
        try {
-        const {data} = await axios.get('/api/chat/get',{headers:{Authorization:token}})
+        const {data} = await axios.get('/api/chat/get',{headers:{Authorization:`Bearer ${token}`}})
         if(data.success){
             setChats(data.chats)
             // If the user has no chats, create new one
@@ -65,7 +65,7 @@ export const AppContextProvider = ({children}) => {
         }
 
        } catch (error) {
-            toast.error(error.message) 
+            toast.error(error?.response?.data?.message || error.message) 
        }
     }
 
