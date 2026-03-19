@@ -6,7 +6,7 @@ import { Navigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 const SideBar = ({isMenuOpen, setIsMenuOpen}) => {
 
-  const { chats, setSelectedChat, theme, setTheme, user,navigate,createNewChat,axios,setChats,fetchUserChats,setToken} = useAppContext()
+  const { chats, setSelectedChat, theme, setTheme, user,navigate,createNewChat,axios,setChats,fetchUserChats,setToken,token} = useAppContext()
   
   const [search, setSearch] = useState('')
 
@@ -22,7 +22,9 @@ const SideBar = ({isMenuOpen, setIsMenuOpen}) => {
         e.stopPropagation()
         const confirm = window.confirm("Are you sure you want to delete this chat?")
         if(!confirm) return
-        const {data} = await axios.post('/api/chat/delete',{chatId},{headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}})
+        const {data} = await axios.delete('/api/chat/delete',{
+          data: { chatId },
+          headers: { Authorization: `Bearer ${token}` }})
         if(data.success){
           setChats(prev => prev.filter(chat => chat._id !== chatId))
           await fetchUserChats()
@@ -38,7 +40,7 @@ const SideBar = ({isMenuOpen, setIsMenuOpen}) => {
       <img src={theme === 'dark' ? assets.logo_full : assets.logo_full_dark} alt="" className='w-full max-w-48' />
 
       {/* new chat button */}
-      <button className='flex justify-center items-center w-full py-2 mt-10 text-white bg-gradient-to-r from-[#A456F7] to-[#3D81F6] text-sm rounded-md cursor-pointer'>
+      <button onClick={createNewChat} className='flex justify-center items-center w-full py-2 mt-10 text-white bg-gradient-to-r from-[#A456F7] to-[#3D81F6] text-sm rounded-md cursor-pointer'>
         <span className='mr-2 text-xl'>+</span>New Chat
       </button>
 
