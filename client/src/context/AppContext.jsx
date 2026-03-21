@@ -35,16 +35,28 @@ export const AppContextProvider = ({children}) => {
      
     }
 
-    const createNewChat = async() => {
-        try {
-            if(!user) return toast('Login to create chat')
-            navigate('/')
-            await axios.post('/api/chat/create',{headers:{Authorization:`Bearer ${token}`}})
-            await fetchUserChats()
-        } catch (error) {
-            toast.error(error?.response?.data?.message || error.message)
+    const createNewChat = async () => {
+  try {
+    if (!user) return toast('Login to create chat')
+
+    navigate('/')
+
+    await axios.post(
+      '/api/chat/create',
+      {}, // body must be here
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
         }
-    }
+      }
+    )
+
+    await fetchUserChats()
+
+  } catch (error) {
+    toast.error(error?.response?.data?.message || error.message)
+  }
+}
 
         
 
