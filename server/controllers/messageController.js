@@ -14,7 +14,7 @@ export const textMessageController = async (req, res) => {
         const { chatId, prompt } = req.body
 
         const chat = await Chat.findOne({ userId, _id: chatId })
-        chat.messages.push({ role: "User", content: prompt, timestamp: Date.now(), isImage: false })
+        chat.messages.push({ role: "user", content: prompt, timestamp: Date.now(), isImage: false })
 
         const {choices} = await openai.chat.completions.create({
             model: "gemini-3-flash-preview",
@@ -48,7 +48,7 @@ export const imageMessageController = async (req, res) => {
         //Find chat
         const chat = await Chat.findOne({userId, _id:chatId})
         //Add user message to chat
-        chat.messages.push({role:"User", content: prompt, timestamp: Date.now(), isImage: true })
+        chat.messages.push({role:"user", content: prompt, timestamp: Date.now(), isImage: true })
         //Encode the prompt
         const encodedPrompt=encodeURIComponent(prompt)
 

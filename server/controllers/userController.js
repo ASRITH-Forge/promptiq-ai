@@ -15,11 +15,11 @@ export const registerUser = async (req, res) => {
     try {
         const userExists = await User.findOne({email})
         if(userExists){
-            res.json({success:false,message:"User already exists"})
+            return res.json({success:false,message:"User already exists"})
         }
         const user = await User.create({name, email, password})
         const token = generateToken(user._id)
-        res.json({success:true, message:"User registered successfully", token})
+        return res.json({success:true, message:"User registered successfully", token})
     } catch (error) {
         return res.json({success:false, message:error.message}) 
     }
