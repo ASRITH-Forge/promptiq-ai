@@ -62,7 +62,7 @@ const SideBar = ({isMenuOpen, setIsMenuOpen}) => {
 
       {/* Logo */}
       <img 
-        src={theme === 'dark' ? assets.logo_full : assets.logo_full_dark} 
+        src={theme === 'dark' ? assets.logo_full : assets.logo_final} 
         alt="" 
         className='w-full max-w-48' 
       />

@@ -13,6 +13,7 @@ import bin_icon from "./bin_icon.svg";
 import logout_icon from "./logout_icon.svg";
 import diamond_icon from "./diamond_icon.svg";
 import gallery_icon from "./gallery_icon.svg";
+import logo_final from "./logo_final.png"
 
 import ai_image1 from "./ai_image1.jpg";
 import ai_image2 from "./ai_image2.jpg";
@@ -28,7 +29,7 @@ import ai_image11 from "./ai_image11.jpg";
 import ai_image12 from "./ai_image12.jpg";
 
 export const assets = {
-    logo,
+    logo_final,
     logo_full,
     search_icon,
     user_icon,
