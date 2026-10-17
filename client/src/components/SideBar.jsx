@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { useAppContext } from '../context/AppContext.jsx'
 import { assets } from '../assets/assets'
 import moment from 'moment'
-import { Navigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 
 const SideBar = ({isMenuOpen, setIsMenuOpen}) => {
@@ -19,7 +18,7 @@ const SideBar = ({isMenuOpen, setIsMenuOpen}) => {
     localStorage.removeItem('token')   // remove token from storage
     setToken(null)                    // clear token from state
     toast.success("Logged out successfully")
-    navigate('/login')                // redirect to login page
+    navigate('/')                     // redirect to home / login view
   }
 
   // Function to delete a chat

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { dummyPlans } from '../assets/assets'
 import Loading from './Loading'
 import { useAppContext } from '../context/AppContext'
 import toast from 'react-hot-toast'
@@ -13,25 +12,40 @@ const Credits = () => {
   // Get axios and token from context
   const {axios, token} = useAppContext()
 
-  // Fetch available credit plans
-  const fetchPlans = async()=>{
-    try {
-      const {data} = await axios.get('/api/credit/plan',{
-        headers:{Authorization:`Bearer ${token}`}
-      })
+  // Run on component mount
+  useEffect(() => {
+    let isMounted = true
 
-      if(data.success){
-        setPlans(data.plans)
-      }else{
-        toast.error(data.message || 'Failed to fetch plans')
+    const fetchPlans = async () => {
+      try {
+        const {data} = await axios.get('/api/credit/plan', {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+
+        if (isMounted) {
+          if (data.success) {
+            setPlans(data.plans)
+          } else {
+            toast.error(data.message || 'Failed to fetch plans')
+          }
+        }
+      } catch (error) {
+        if (isMounted) {
+          toast.error(error.message)
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false)
+        }
       }
-
-    } catch (error) {
-      toast.error(error.message)
     }
 
-    setLoading(false) 
-  }
+    fetchPlans()
+
+    return () => {
+      isMounted = false
+    }
+  }, [axios, token])
 
   // Handle plan purchase
   const purchasePlan = async(planId)=>{
@@ -43,7 +57,7 @@ const Credits = () => {
       )
 
       if(data.success){
-        window.location.href = data.url // redirect to payment page
+        window.location.assign(data.url) // redirect to payment page
       }else{
         toast.error(data.message)
       }
@@ -52,11 +66,6 @@ const Credits = () => {
       toast.error(error.message)
     }
   }
-
-  // Run on component mount
-  useEffect(() => {
-    fetchPlans()
-  }, [])
 
   // Show loader while fetching
   if(loading) return <Loading/>

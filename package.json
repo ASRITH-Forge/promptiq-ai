@@ -1,0 +1,12 @@
+{
+  "name": "promptiq-ai",
+  "version": "1.0.0",
+  "description": "PromptIQ AI Full Stack Application",
+  "scripts": {
+    "dev": "npm run dev --prefix client",
+    "client": "npm run dev --prefix client",
+    "server": "npm run server --prefix server",
+    "start": "npm start --prefix server",
+    "build": "npm run build --prefix client"
+  }
+}

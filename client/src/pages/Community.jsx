@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { dummyPublishedImages } from '../assets/assets'
 import Loading from './Loading'
 import { useAppContext } from '../context/AppContext'
+import toast from 'react-hot-toast'
 
 const Community = () => {
 
@@ -12,28 +12,37 @@ const Community = () => {
   // Access axios from global context
   const {axios} = useAppContext()
 
-  // Fetch published images from backend
-  const fetchImages = async()=>{
-   try {
-    const {data} = await axios.get('/api/user/published-images')
-
-    if(data.success){
-      setImages(data.images) // update images state
-    }else{
-      toast.error(data.message)
-    }
-
-   } catch (error) {
-    toast.error(error.message)
-   }
-
-   setLoading(false) // stop loading after request
-  }
-
   // Run once when component mounts
   useEffect(() => {
+    let isMounted = true
+
+    const fetchImages = async () => {
+      try {
+        const {data} = await axios.get('/api/user/published-images')
+        if (isMounted) {
+          if (data.success) {
+            setImages(data.images)
+          } else {
+            toast.error(data.message)
+          }
+        }
+      } catch (error) {
+        if (isMounted) {
+          toast.error(error.message)
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false)
+        }
+      }
+    }
+
     fetchImages()
-  }, [])
+
+    return () => {
+      isMounted = false
+    }
+  }, [axios])
   
   // Show loader while fetching data
   if(loading) return <Loading/>

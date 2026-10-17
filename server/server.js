@@ -8,6 +8,8 @@ import messageRouter from "./routes/messageRoutes.js";
 import creditRouter from "./routes/creditRoutes.js";
 import { stripeWebhooks } from "./controllers/webhooks.js";
 
+import mongoose from "mongoose";
+
 const app = express()
 await connectDB()
 //stripe webhooks
@@ -16,6 +18,18 @@ app.post('/api/stripe',express.raw({type:'application/json'}),stripeWebhooks)
 
 app.use(cors())
 app.use(express.json())
+
+// Database connection check middleware
+app.use('/api', (req, res, next) => {
+    if (req.path === '/stripe') return next();
+    if (mongoose.connection.readyState !== 1) {
+        return res.json({
+            success: false,
+            message: "Database connection failed (MongoDB Authentication / Network error). Please check your MongoDB credentials in server/.env."
+        });
+    }
+    next();
+});
 
 //routes
 app.get("/",(req,res)=>res.send('Server is Live!'))
